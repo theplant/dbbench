@@ -6,6 +6,7 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"sync/atomic"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -115,7 +116,7 @@ func main() {
 
 	throttle := make(chan int, *gophers)
 	start := time.Now()
-	var totalDuration time.Duration
+	var totalDuration int64
 	for i := 0; i <= *total; i++ {
 		throttle <- i
 		if i%(*total/100) == 0 {
@@ -123,7 +124,7 @@ func main() {
 		}
 		go func(i int) {
 			defer func() { <-throttle }()
-			defer func(start time.Time) { totalDuration += time.Now().Sub(start) }(time.Now())
+			defer func(start time.Time) { atomic.AddInt64(&totalDuration, int64(time.Now().Sub(start))) }(time.Now())
 			if _, err := db.PutItem(&dynamodb.PutItemInput{
 				TableName: aws.String(*table),
 				Item: map[string]*dynamodb.AttributeValue{
@@ -140,7 +141,7 @@ func main() {
 		}(i)
 	}
 	fmt.Println("")
-	log.Println("Total Duration:", totalDuration)
-	log.Println("TPI:", totalDuration/time.Duration(*total))
 	log.Println("Took:", time.Now().Sub(start))
+	log.Println("Total Duration:", time.Duration(totalDuration))
+	log.Println("TPI:", time.Duration(totalDuration/int64(*total)))
 }

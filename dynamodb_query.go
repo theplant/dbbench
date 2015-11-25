@@ -8,6 +8,7 @@ import (
 	"log"
 	"math/rand"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -45,56 +46,43 @@ func main() {
 	))
 
 	jobChans := make(chan struct{}, *gophers)
-	// var wg sync.WaitGroup
-	var count int
-	var lock sync.Mutex
-	var totalDuration time.Duration
-	doneChan := make(chan int)
 	start := time.Now()
+	var totalDuration int64
+	var wg sync.WaitGroup
 
 	rand.Seed(time.Now().Unix())
-	go func() {
-		for {
-			jobChans <- struct{}{}
-			go func() {
-				start := time.Now()
-				if resp, err := db.GetItem(&dynamodb.GetItemInput{
-					TableName: aws.String(*table),
-					Key: map[string]*dynamodb.AttributeValue{
-						// "bench_area": &dynamodb.AttributeValue{S: aws.String("KingsLanding")},
-						"id": &dynamodb.AttributeValue{S: aws.String(fmt.Sprintf("%s%d", *idPrefix, rand.Intn(*idTop)))},
-					},
-				}); err != nil {
-					panic(err)
-				} else {
-					if *debug {
-						log.Println(resp)
-					}
-				}
-
-				lock.Lock()
-				count++
-				if count%((*total)/100) == 0 {
-					if *verbose {
-						fmt.Printf("\r%s Queried %d%%", time.Now().Format("2006-01-02 15:04:05"), count/((*total)/100))
-					}
-				}
-				totalDuration += time.Now().Sub(start)
-				if count >= *total {
-					doneChan <- count
-				}
-				lock.Unlock()
-				<-jobChans
-			}()
+	for i := 0; i <= *total; i++ {
+		jobChans <- struct{}{}
+		wg.Add(1)
+		if i%((*total)/100) == 0 {
+			fmt.Printf("\r%s Queried %d%%", time.Now().Format("2006-01-02 15:04:05"), i/((*total)/100))
 		}
-	}()
+		go func() {
+			start := time.Now()
+			if resp, err := db.GetItem(&dynamodb.GetItemInput{
+				TableName: aws.String(*table),
+				Key: map[string]*dynamodb.AttributeValue{
+					// "bench_area": &dynamodb.AttributeValue{S: aws.String("KingsLanding")},
+					"id": &dynamodb.AttributeValue{S: aws.String(fmt.Sprintf("%s%d", *idPrefix, rand.Intn(*idTop)))},
+				},
+			}); err != nil {
+				panic(err)
+			} else {
+				if *debug {
+					log.Println(resp)
+				}
+			}
 
-	fcount := <-doneChan
-	if *verbose {
-		fmt.Println("")
+			atomic.AddInt64(&totalDuration, int64(time.Now().Sub(start)))
+			wg.Done()
+			<-jobChans
+		}()
 	}
-	log.Println("Count:", fcount)
-	log.Println("Took:", totalDuration)
-	log.Println("PQT:", totalDuration/time.Duration(*total))
+
+	wg.Wait()
+
+	fmt.Println("")
 	log.Println("Took:", time.Now().Sub(start))
+	log.Println("Total Duration:", time.Duration(totalDuration))
+	log.Println("TPQ:", time.Duration(totalDuration/int64(*total)))
 }
