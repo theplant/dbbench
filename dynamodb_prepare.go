@@ -135,6 +135,10 @@ func main() {
 					"last_name":  &dynamodb.AttributeValue{S: aws.String(fmt.Sprintf("Tester-%d", i))},
 					"age":        &dynamodb.AttributeValue{N: aws.String("25")},
 				},
+				// ConditionExpression: aws.String("id <> :id"),
+				// ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
+				// 	":id": &dynamodb.AttributeValue{S: aws.String("10")},
+				// },
 			}); err != nil {
 				panic(err)
 			}
