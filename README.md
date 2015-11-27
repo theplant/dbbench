@@ -9,14 +9,28 @@ In both the write and read tests, PostgreSQL is having better performance in gen
 
 One thing to mind is that in the go benchmark programs, the AWS DynamoDB SDK is using HTTP (and JSON, maybe) to save and retrieve data, while the PostgreSQL one is communicating over its own protocol (at least not HTTP[S]). But this should be justified, because our server is going to be written in Go and the DynamoDB SDK is from Amazon.
 
-# Write
+Write tests is as comprehensive as read tests.
 
-PostgreSQL has better write performance over DynamoDB (WCU: 1000).
+RCU: Read Capacity Units
+
+WCU: Write Capacity Units
+
+[Read and Write Capacity Units](http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html)
+
+# Preparation
 
 Type|Gophers|Request Count|Total Time|Time Per Action|Total Duration
 ----|----|----|----|
 PostgreSQL|8|15000000|1h51m59.261364771s|3.576059ms|14h54m0.888903876s
 DynamoDB (WCU: 1000)|8|20000000|8h33m38.893351425s|6.158578ms|34h12m51.567642963s
+
+PostgreSQL Database Size: 21866690
+
+DynamoDB Database Size:   20000000
+
+# Write
+
+PostgreSQL has better write performance over DynamoDB (WCU: 1000).
 
 Type|Gophers|Request Count|Total Time|Time Per Action|Total Duration
 ----|----|----|----|
@@ -40,15 +54,11 @@ DynamoDB (WCU: 1000)|512|300000|4m30.577856368s|38h2m4.644372851s|456.415481ms
 PostgreSQL is having better performance over DynamoDB.
 
 But while receiving 256 concurrent request, PostgreSQL starts returning error: `pq: remaining connection slots are reserved for non-replication superuser connections`. DynamoDB also returned error like `connect: cannot assign requested address
-RequestError: send request failed` for 256 concurrent requests.
+RequestError: send request failed` for 256 concurrent requests in RCU 1000.
 
 While for DynamoDB, query benchmark returned unstable result over the tests with concurrent requests number larger than 64 (marked with * and each has detail result at the bottom).
 
-PostgreSQL Database Size: 21866690
-
-DynamoDB Database Size:   20000000
-
-(RCU represents: [Read Capacity Unit]())
+Another thing is that, DynamoDB RCU 1000 and RCU 5000 is having similar performance when concurrent request number is smaller than 256. But RCU 5000 is having better performance than RCU 1000.
 
 Type|Gophers|Request Count|Total Time|Time Per Action|Total Duration
 ----|----|----|----|
