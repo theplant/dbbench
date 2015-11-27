@@ -2,12 +2,12 @@
 
 Most useful columns to look at first sight:
 
-* Gophers: number of concurrent request at the same time;
-* Time Per Action: time per action;
+* Gophers (number of concurrent requests);
+* Time Per Action;
 
 In both the write and read tests, PostgreSQL is having better performance in general.
 
-One thing to mind is that in the go benchmark programs, the AWS DynamoDB SDK is using HTTP (and JSON, maybe) to save and retrieve data, while the PostgreSQL is communicating with its own server over their own protocol (at least not HTTP[S] which I am sure). But this should be justified is because our server is going to written in Go and the DynamoDB SDK is from Amazon.
+One thing to mind is that in the go benchmark programs, the AWS DynamoDB SDK is using HTTP (and JSON, maybe) to save and retrieve data, while the PostgreSQL one is communicating over its own protocol (at least not HTTP[S]). But this should be justified, because our server is going to be written in Go and the DynamoDB SDK is from Amazon.
 
 # Write
 
@@ -32,7 +32,8 @@ DynamoDB (WCU: 1000)|4|40000|1m5.215556218s|6.515916ms|4m20.636652622s
 DynamoDB (WCU: 1000)|16|300000|2m19.875626219s|7.452623ms|37m15.786926217s
 DynamoDB (WCU: 1000)|64|300000|2m58.181090652s|37.91286ms|3h9m33.858236529s
 DynamoDB (WCU: 1000)|128|300000|2m34.260546971s|63.93929ms|5h19m41.787248308s
-DynamoDB (WCU: 1000)|256|300000|4m26.385739836s||223.045787ms18h35m13.736355669s
+DynamoDB (WCU: 1000)|256|300000|4m26.385739836s|223.045787ms|18h35m13.736355669s
+DynamoDB (WCU: 1000)|512|300000|4m30.577856368s|38h2m4.644372851s|456.415481ms
 
 # Read
 
