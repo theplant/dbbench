@@ -20,7 +20,7 @@ WCU: Write Capacity Units
 # Preparation
 
 Type|Gophers|Request Count|Total Time|Time Per Action|Total Duration
-----|----|----|----|
+----|----|----|----|----|----|
 PostgreSQL|8|15000000|1h51m59.261364771s|3.576059ms|14h54m0.888903876s
 DynamoDB (WCU: 1000)|8|20000000|8h33m38.893351425s|6.158578ms|34h12m51.567642963s
 
@@ -33,7 +33,7 @@ DynamoDB Database Size:   20000000
 PostgreSQL has better write performance over DynamoDB (WCU: 1000).
 
 Type|Gophers|Request Count|Total Time|Time Per Action|Total Duration
-----|----|----|----|
+----|----|----|----|----|----|
 PostgreSQL|1|100000|2m12.735682795s|1.318288ms|2m11.828872449s
 PostgreSQL|4|200000|1m49.217753069s|2.175379ms|7m15.075873342s
 PostgreSQL|16|400000|2m24.950670158s|5.790638ms|38m36.255239229s
@@ -61,7 +61,7 @@ While for DynamoDB, query benchmark returned unstable result over the tests with
 Another thing is that, DynamoDB RCU 1000 and RCU 5000 is having similar performance when concurrent request number is smaller than 256. But RCU 5000 is having better performance than RCU 1000.
 
 Type|Gophers|Request Count|Total Time|Time Per Action|Total Duration
-----|----|----|----|
+----|----|----|----|----|----|
 PostgreSQL|1|400000|3m34.036918517s|527.178µs|3m30.871550027s
 PostgreSQL|4|400000|1m12.09766096s|713.366µs|4m45.34660808s
 PostgreSQL|16|800000|2m4.208954425s|2.47646ms|33m1.168660067s
@@ -82,14 +82,14 @@ DynamoDB (RCU: 5000)*|128|500000|5m2.89205501s|73.755437ms|10h32m57.733658743s
 DynamoDB (RCU: 5000)*|256|466666|4m10.980653186s|131.074171ms|17h19m13.151302908s
 
 Type|Gophers|Request Count|Total Time|Time Per Action|Total Duration
-----|----|----|----|
+----|----|----|----|----|----|
 DynamoDB (RCU: 1000)|64|400000|1m25.373076402s|13.554102ms|1h30m21.640854546s
 DynamoDB (RCU: 1000)|64|400000|1m54.537359725s|18.207428ms|2h1m22.971520966s
 DynamoDB (RCU: 1000)|64|100000|53.227440049s|32.478477ms|54m7.847754072s
 DynamoDB (RCU: 1000)|64|100000|59.669546979s|38.045977ms|1h3m24.597780943s
 
 Type|Gophers|Request Count|Total Time|Time Per Action|Total Duration
-----|----|----|----|
+----|----|----|----|----|----|
 DynamoDB (RCU: 1000)|128|100000|59.276534133s|74.915274ms|2h4m51.527427023s
 DynamoDB (RCU: 1000)|128|200000|3m13.146200035s|122.591917ms|6h48m38.383432873s
 DynamoDB (RCU: 1000)|128|200000|1m4.407081845s|40.312814ms|2h14m22.562836411s
@@ -97,28 +97,28 @@ DynamoDB (RCU: 1000)|128|200000|1m47.318676591s|67.745684ms|3h45m49.136815463s
 DynamoDB (RCU: 1000)|128|600000|2m57.192423262s|36.666232ms|6h6m39.739455904s
 
 Type|Gophers|Request Count|Total Time|Time Per Action|Total Duration
-----|----|----|----|
+----|----|----|----|----|----|
 DynamoDB (RCU: 1000)|256|800000|9m55.959232044s|185.822585ms|41h17m38.068065537s
 DynamoDB (RCU: 1000)|256|400000|5m50.649290392s|219.034951ms|24h20m13.980434483s
 DynamoDB (RCU: 1000)|256|400000|6m34.159067526s|247.891568ms|27h32m36.627559989s
 DynamoDB (RCU: 1000)|256|200000|2m22.148292624s|176.39122ms|9h47m58.244162273s
 
 Type|Gophers|Request Count|Total Time|Time Per Action|Total Duration
-----|----|----|----|
+----|----|----|----|----|----|
 DynamoDB (RCU: 5000)|64|400000|2m6.433985059s|20.066885ms|2h13m46.754002357s
 DynamoDB (RCU: 5000)|64|400000|3m42.90090105s|35.408459ms|3h56m3.383656876s
 DynamoDB (RCU: 5000)|64|400000|2m24.692404994s|23.050429ms|2h33m40.171761834s
 DynamoDB (RCU: 5000)|64|400000|4m13.348781951s|40.40081ms|4h29m20.324353009s
 
 Type|Gophers|Request Count|Total Time|Time Per Action|Total Duration
-----|----|----|----|
+----|----|----|----|----|----|
 DynamoDB (RCU: 5000)|128|400000|1m37.407576096s|30.266023ms|3h21m46.409364774s
 DynamoDB (RCU: 5000)|128|600000|5m18.301101638s|66.618784ms|11h6m11.270799489s
 DynamoDB (RCU: 5000)|128|600000|8m9.533071717s|102.892388ms|17h8m55.433207371s
 DynamoDB (RCU: 5000)|128|400000|5m6.326470592s|95.244553ms|10h34m57.82126334s
 
 Type|Gophers|Request Count|Total Time|Time Per Action|Total Duration
-----|----|----|----|
+----|----|----|----|----|----|
 DynamoDB (RCU: 5000)|256|800000|7m56.815498277s|148.852239ms|33h4m41.79195969s
 DynamoDB (RCU: 5000)|256|400000|4m17.034918153s|160.130754ms|17h47m32.30182556s
 DynamoDB (RCU: 5000)|256|400000|2m32.608083526s|94.025159ms|10h26m50.063731445s
