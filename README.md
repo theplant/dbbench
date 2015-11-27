@@ -1,15 +1,17 @@
 # DynamoDB and PostgreSQL Benchmarks
 
+Benchmark codes: https://github.com/theplant/dbbench
+
 Most useful columns to look at first sight:
 
 * Gophers (number of concurrent requests);
 * Time Per Action;
 
-In both the write and read tests, PostgreSQL is having better performance in general.
+__Conclusion__: in both the write and read tests, PostgreSQL is having better performance in general.
 
 One thing to mind is that in the go benchmark programs, the AWS DynamoDB SDK is using HTTP (and JSON, maybe) to save and retrieve data, while the PostgreSQL one is communicating over its own protocol (at least not HTTP[S]). But this should be justified, because our server is going to be written in Go and the DynamoDB SDK is from Amazon.
 
-Write tests is as comprehensive as read tests.
+Write tests are not as comprehensive as read tests.
 
 RCU: Read Capacity Units
 
@@ -53,10 +55,10 @@ DynamoDB (WCU: 1000)|512|300000|4m30.577856368s|38h2m4.644372851s|456.415481ms
 
 PostgreSQL is having better performance over DynamoDB.
 
-But while receiving 256 concurrent request, PostgreSQL starts returning error: `pq: remaining connection slots are reserved for non-replication superuser connections`. DynamoDB also returned error like `connect: cannot assign requested address
+But while receiving 256 concurrent request, PostgreSQL starts returning error: `pq: remaining connection slots are reserved for non-replication superuser connections`. DynamoDB also return error like `connect: cannot assign requested address
 RequestError: send request failed` for 256 concurrent requests in RCU 1000.
 
-While for DynamoDB, query benchmark returned unstable result over the tests with concurrent requests number larger than 64 (marked with * and each has detail result at the bottom).
+While for DynamoDB, query benchmark return unstable result over the tests with concurrent requests number larger than 64 (marked with * and each has detail result at the bottom).
 
 Another thing is that, DynamoDB RCU 1000 and RCU 5000 is having similar performance when concurrent request number is smaller than 256. But RCU 5000 is having better performance than RCU 1000.
 
@@ -80,6 +82,8 @@ DynamoDB (RCU: 5000)|16|400000|2m31.908523721s|6.067671ms|40m27.068745639s
 DynamoDB (RCU: 5000)*|64|400000|3m6.844018263s|29.731645ms|3h18m12.658443519s
 DynamoDB (RCU: 5000)*|128|500000|5m2.89205501s|73.755437ms|10h32m57.733658743s
 DynamoDB (RCU: 5000)*|256|466666|4m10.980653186s|131.074171ms|17h19m13.151302908s
+
+## Extra Read Benchmark Data
 
 Type|Gophers|Request Count|Total Time|Time Per Action|Total Duration
 ----|----|----|----|----|----|
