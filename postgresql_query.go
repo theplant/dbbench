@@ -52,7 +52,7 @@ func main() {
 			var id, age int
 			var email, firstName, lastName string
 			if err := db.QueryRow("select * from test_table where id = $1", rand.Intn(*idTop)).Scan(&id, &email, &firstName, &lastName, &age); err != nil {
-				panic(err)
+				fmt.Println(err)
 			}
 			if *debug {
 				log.Println(id, email, firstName, lastName, age)

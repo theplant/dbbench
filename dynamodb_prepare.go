@@ -140,7 +140,7 @@ func main() {
 				// 	":id": &dynamodb.AttributeValue{S: aws.String("10")},
 				// },
 			}); err != nil {
-				panic(err)
+				fmt.Println(err)
 			}
 		}(i)
 	}

@@ -66,7 +66,7 @@ func main() {
 					"id": &dynamodb.AttributeValue{S: aws.String(fmt.Sprintf("%s%d", *idPrefix, rand.Intn(*idTop)))},
 				},
 			}); err != nil {
-				panic(err)
+				fmt.Println(err)
 			} else {
 				if *debug {
 					log.Println(resp)

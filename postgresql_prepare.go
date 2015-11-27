@@ -66,7 +66,7 @@ func main() {
 				"Tester",
 				25,
 			); err != nil {
-				panic(err)
+				fmt.Println(err)
 			}
 		}(i)
 	}
